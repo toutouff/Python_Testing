@@ -5,12 +5,12 @@ from flask import Flask,render_template,request,redirect,flash,url_for
 
 
 def loadClubs():
-    with open('/home/touf/PycharmProjects/P11_python_Testing/Python_Testing/clubs.json') as c:
+    with open('clubs.json') as c:
          listOfClubs = json.load(c)['clubs']
          return listOfClubs
 
 def loadCompetitions():
-    with open('/home/touf/PycharmProjects/P11_python_Testing/Python_Testing/competitions.json') as comps:
+    with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
 
