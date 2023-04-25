@@ -1,10 +1,8 @@
 import sys
-# possible TODO : add encoder so test don't depend on predone mathematics
 
 # TODO : test if point are deduced from club's total
 # DONE
 def test_point_are_deduced_from_club(client):
-
     data={
         'club':'Simply Lift',
         'competition':'Spring Festival',
@@ -30,3 +28,5 @@ def test_places_are_deduced_from_event(client):
     print(response.data,file=sys.stderr)
     assert b'Number of Places: 16' in response.data
     assert 200 == response.status_code
+
+
