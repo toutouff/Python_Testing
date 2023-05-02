@@ -35,7 +35,7 @@ def index():
 def showSummary():
     club = club_by_email_getter(request.form['email'])
     if club:
-        return render_template('welcome.html',club=club,competitions=competitions)
+        return render_template('welcome.html',club=club,clubs = clubs,competitions=competitions)
     return 'sorry, mail not found'
 
 
