@@ -10,8 +10,9 @@
     <form action="/purchasePlaces" method="post">
         <input type="hidden" name="club" value="{{club['name']}}">
         <input type="hidden" name="competition" value="{{competition['name']}}">
-        <!-- FIXME : add a maximum inside the form -->
-        <label for="places">How many places?</label><input type="number" name="places" id=""/>
+
+        <!-- FIXME : add a maximum coresponding to specified value -->
+      <label for="places">How many places?</label><input type="number" name="places" id="" max="{{club['points']}}"/>
         <button type="submit">Book</button>
     </form>
 </body>
