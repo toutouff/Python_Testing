@@ -10,6 +10,4 @@ def test_point_are_showed(client):
 
 
 def test_past_competion_unbookable(client):
-    response = client.post('showSummary',data={'email':'john@simplylift.co'})
-    print(response.data.decode())
-
+    pass

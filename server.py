@@ -1,5 +1,6 @@
 import json
 from sys import stderr
+import datetime
 
 from flask import Flask, render_template, request, redirect, flash, url_for
 
@@ -13,7 +14,17 @@ def loadClubs():
 def loadCompetitions():
     with open('competitions.json') as comps:
         listOfCompetitions = json.load(comps)['competitions']
-        return listOfCompetitions
+        return comp_validator(listOfCompetitions)
+
+
+def comp_validator(l_of_comp):
+    return [date_checker(comp) for comp in l_of_comp]
+
+
+def date_checker(competition):
+    competition['is_passed'] = datetime.datetime.strptime(competition['date'],
+                                                          '%Y-%m-%d %H:%M:%S') < datetime.datetime.now()
+    return competition
 
 
 app = Flask(__name__)
@@ -28,6 +39,15 @@ def club_by_email_getter(mail):
         if club['email'] == mail:
             return club
     return None
+
+
+
+def getter(iterable,champs,valeur):
+    for c in iterable:
+        if c[str(champs)]==valeur:
+            return c
+    return None
+
 
 
 @app.route('/')
@@ -45,13 +65,15 @@ def showSummary():
 
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    foundClub = getter(clubs,'name',club)
+    foundCompetition = getter(competitions,'name',competition)
+    # foundClub = [c for c in clubs if c['name'] == club ][0] # turn in infinite loop
+    # foundCompetition = [c for c in competitions if c['name'] == competition][0] # turn in infinite loop 
     if foundClub and foundCompetition:
         return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        flash("Something went wrong please try again")
+        return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
 
 
 # FIXME : limit maximum place
@@ -66,10 +88,10 @@ def purchasePlaces():
         competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - int(request.form['places'])
         club['points'] = str(int(club['points']) - int(request.form['places']))
         flash('Great-booking complete!')
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club, competitions=competitions, clubs=clubs)
     else:
         flash('error too many place booked')
-        return render_template('welcome.html')
+        return render_template('welcome.html', club=club, competitions=competitions, clubs=clubs)
 
 
 # TODO: Add route for points display
