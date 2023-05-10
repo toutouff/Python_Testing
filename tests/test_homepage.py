@@ -15,3 +15,10 @@ def test_should_status_ok(client):
     response = client.get("/")
     print(response)
     assert response.status_code == 200
+
+
+
+def test_logout(client):
+    response = client.get('logout')
+    assert 'Redirecting' in response.data.decode()
+    print(response.data.decode())
