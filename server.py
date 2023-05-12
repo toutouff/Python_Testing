@@ -49,15 +49,16 @@ def getter(iterable,champs,valeur):
     return None
 
 
-
+# add of the point display here to insure no connection is needed and no new route have to be created
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',clubs=clubs)
 
 
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
     club = club_by_email_getter(request.form['email'])
+
     if club:
         return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
     return 'sorry, mail not found'
@@ -92,9 +93,6 @@ def purchasePlaces():
     else:
         flash('error too many place booked')
         return render_template('welcome.html', club=club, competitions=competitions, clubs=clubs)
-
-
-# TODO: Add route for points display
 
 
 @app.route('/logout')
