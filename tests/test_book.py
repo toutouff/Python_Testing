@@ -6,8 +6,6 @@ def test_booking_13_places():
     response = client.get('book/Spring%20Festival/Simply%20Lift')
     print(response.data.decode())
     assert 'max="12"' in response.data.decode()
-# TODO : test if point are deduced from club's total
-# DONE
 
 
 def test_point_are_deduced_from_club():
@@ -24,7 +22,6 @@ def test_point_are_deduced_from_club():
     assert 200 == response.status_code
 
 
-# TODO : test if place are deduced from competition's total# DONE
 def test_places_are_deduced_from_event():
     client = client_getter()
     data = {
@@ -65,5 +62,3 @@ def test_non_existent_comp_and_club():
     assert 'Something went wrong please try again' in response.data.decode()
 
 
-# TODO : test if ui block you from booking more place than you have points
-# TODO : test if ui block you from booking more than 12 place if you have more than 12 points
