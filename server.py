@@ -41,33 +41,31 @@ def club_by_email_getter(mail):
     return None
 
 
-
-def getter(iterable,champs,valeur):
+def getter(iterable, champs, valeur):
     for c in iterable:
-        if c[str(champs)]==valeur:
+        if c[str(champs)] == valeur:
             return c
     return None
 
 
-# add of the point display here to insure no connection is needed and no new route have to be created
 @app.route('/')
 def index():
-    return render_template('index.html',clubs=clubs)
+    return render_template('index.html', clubs=clubs)
 
 
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
     club = club_by_email_getter(request.form['email'])
-
     if club:
         return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
-    return 'sorry, mail not found'
+    flash('sorry, mail not found.')
+    return render_template('index.html',clubs=clubs)
 
 
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
-    foundClub = getter(clubs,'name',club)
-    foundCompetition = getter(competitions,'name',competition)
+    foundClub = getter(clubs, 'name', club)
+    foundCompetition = getter(competitions, 'name', competition)
     # foundClub = [c for c in clubs if c['name'] == club ][0] # turn in infinite loop
     # foundCompetition = [c for c in competitions if c['name'] == competition][0] # turn in infinite loop 
     if foundClub and foundCompetition:
@@ -77,14 +75,14 @@ def book(competition, club):
         return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
 
 
-# FIXME : limit maximum place
-# TODO : deduce place amount from club's point 
-# TODO : add conditional based on club point >= request.form places 
-#           else flash error too many place , not enough point
 @app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
+    #   TODO : insure no booking in past competition
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
+    if competition['is_passed']:
+        flash('error past competition booking')
+        return render_template('welcome.html',clubs= clubs,competitions= competitions,club=club)
     if int(request.form['places']) <= int(club['points']):
         competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - int(request.form['places'])
         club['points'] = str(int(club['points']) - int(request.form['places']))
