@@ -1,7 +1,8 @@
 import sys
+from tests.conftest import client_getter
 
-
-def test_booking_13_places(client):
+def test_booking_13_places():
+    client = client_getter()
     response = client.get('book/Spring%20Festival/Simply%20Lift')
     print(response.data.decode())
     assert 'max="12"' in response.data.decode()
@@ -9,7 +10,8 @@ def test_booking_13_places(client):
 # DONE
 
 
-def test_point_are_deduced_from_club(client):
+def test_point_are_deduced_from_club():
+    client = client_getter()
     data = {
         'club': 'Simply Lift',
         'competition': 'Spring Festival',
@@ -23,7 +25,8 @@ def test_point_are_deduced_from_club(client):
 
 
 # TODO : test if place are deduced from competition's total# DONE
-def test_places_are_deduced_from_event(client):
+def test_places_are_deduced_from_event():
+    client = client_getter()
     data = {
         'club': 'Simply Lift',
         'competition': 'Spring Festival',
@@ -35,14 +38,16 @@ def test_places_are_deduced_from_event(client):
     assert b'Number of Places: 16' in response.data
     assert 200 == response.status_code
 
-def test_max_has_changed(client):
+def test_max_has_changed():
+    client = client_getter()
     response = client.get('book/Spring%20Festival/Simply%20Lift')
     print(response.data.decode())
     assert 'max="4"' in response.data.decode()
 
 
 
-def test_booking_too_many_ticket(client):
+def test_booking_too_many_ticket():
+    client = client_getter()
     data = {
         'club': 'Simply Lift',
         'competition': 'Spring Festival',
@@ -53,7 +58,8 @@ def test_booking_too_many_ticket(client):
     assert 'error too many place booked' in response.data.decode()
 
 
-def test_non_existent_comp_and_club(client):
+def test_non_existent_comp_and_club():
+    client = client_getter()
     response = client.get('book/falseCompetition/fakeClub')
     print(response.data.decode())
     assert 'Something went wrong please try again' in response.data.decode()
