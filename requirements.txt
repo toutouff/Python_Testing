@@ -1,5 +1,6 @@
 attrs==22.2.0
 click==7.1.2
+coverage==7.2.7
 exceptiongroup==1.1.1
 Flask==1.1.2
 iniconfig==2.0.0
@@ -12,4 +13,3 @@ pytest==7.2.2
 pytest-flask==1.2.0
 tomli==2.0.1
 Werkzeug==1.0.1
-
